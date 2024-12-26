@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twitter Trend Scraper</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f8fa;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1da1f2;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        button {
+            background-color: #1da1f2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin: 0 auto;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #1991db;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        #trendsList {
+            margin-top: 20px;
+            list-style-type: none;
+            padding: 0;
+        }
+        #trendsList li {
+            padding: 10px;
+            border-bottom: 1px solid #e1e8ed;
+            color: #14171a;
+        }
+        #trendsList li:last-child {
+            border-bottom: none;
+        }
+        .loading {
+            text-align: center;
+            margin-top: 20px;
+            color: #657786;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Twitter Trend Scraper</h1>
+        <button id="scrapeButton" onclick="scrapeTrends()">Scrape Trending Topics</button>
+        <div id="loading" class="loading">Loading trends...</div>
+        <ul id="trendsList"></ul>
+    </div>
+
+    <script>
+        function scrapeTrends() {
+            const button = document.getElementById('scrapeButton');
+            const loading = document.getElementById('loading');
+            const trendsList = document.getElementById('trendsList');
+            
+            // Disable button and show loading
+            button.disabled = true;
+            loading.style.display = 'block';
+            trendsList.innerHTML = '';
+
+            fetch('/scrape', {
+                method: 'POST',
+            })
+            .then(response => response.json())
+            .then(data => {
+                loading.style.display = 'none';
+                data.trends.forEach(trend => {
+                    const li = document.createElement('li');
+                    li.textContent = trend;
+                    trendsList.appendChild(li);
+                });
+                button.disabled = false;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                loading.style.display = 'none';
+                button.disabled = false;
+                alert('An error occurred while fetching trends');
+            });
+        }
+    </script>
+</body>
+</html>
