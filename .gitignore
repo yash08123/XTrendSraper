@@ -1,3 +1,10 @@
 cookies/
 drivers/
 .env
+
+.pyre/
+
+
+.pytype/
+
+cython_debug/
