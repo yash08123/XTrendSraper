@@ -112,4 +112,5 @@ python app.py
 Feel free to open issues and submit pull requests.
 
 ## License
+MIT License
 
