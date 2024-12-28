@@ -67,7 +67,7 @@ def scrape():
 
     # Save trends to MongoDB
     if trends:
-        trends_data = {"trends": trends, "source": "Twitter"}
+        trends_data = {"trends": trends, "source": "Twitter(X)"}
         collection.insert_one(trends_data)
 
     return jsonify(response)

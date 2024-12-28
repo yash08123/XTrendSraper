@@ -1,10 +1,18 @@
 import React, { useState } from "react";
 
+interface TrendsData {
+  trends: string[];
+  source?: string;
+  timestamp?: string;
+}
+
 const App: React.FC = () => {
   const [cookies, setCookies] = useState("");
   const [trends, setTrends] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [cookiesSaved, setCookiesSaved] = useState(false);
+  const [dataSource, setDataSource] = useState<string>("");
+  const [timestamp, setTimestamp] = useState<string>("");
 
   const handleCookiesSubmit = async () => {
     try {
@@ -31,6 +39,8 @@ const App: React.FC = () => {
   const scrapeTrends = async () => {
     setLoading(true);
     setTrends([]);
+    setDataSource("");
+    setTimestamp("");
 
     try {
       const response = await fetch("/scrape", {
@@ -38,8 +48,10 @@ const App: React.FC = () => {
       });
 
       if (response.ok) {
-        const data = await response.json();
+        const data: TrendsData = await response.json();
         setTrends(data.trends || []);
+        setDataSource("Live Scrape");
+        setTimestamp(new Date().toLocaleString());
       } else {
         alert("Failed to fetch trends. Ensure cookies are saved.");
       }
@@ -56,10 +68,19 @@ const App: React.FC = () => {
     try {
       const response = await fetch("/recent-trends");
       if (response.ok) {
-        const data = await response.json();
-        setTrends(data.trends || []);
+        const data: TrendsData = await response.json();
+        if (data.trends && data.trends.length > 0) {
+          setTrends(data.trends);
+          setDataSource("Database");
+          setTimestamp(data.timestamp || "");
+        } else {
+          alert("No trends found in database.");
+          setTrends([]);
+          setDataSource("");
+          setTimestamp("");
+        }
       } else {
-        alert("Failed to fetch recent trends.");
+        alert("Failed to fetch recent trends from database.");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -100,7 +121,7 @@ const App: React.FC = () => {
                 loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500"
               } text-white py-2 px-4 rounded-full w-full transition duration-300 hover:bg-blue-600`}
             >
-              {loading ? "Loading..." : "Scrape Trending Topics"}
+              {loading ? "Scraping..." : "Scrape New Trends"}
             </button>
             <button
               onClick={fetchRecentTrends}
@@ -109,20 +130,29 @@ const App: React.FC = () => {
                 loading ? "bg-gray-400 cursor-not-allowed" : "bg-purple-500"
               } text-white py-2 px-4 rounded-full w-full transition duration-300 hover:bg-purple-600`}
             >
-              Fetch Recent Trends
+              {loading ? "Loading..." : "Load Recent Trends from DB"}
             </button>
           </div>
         )}
-        <ul className="mt-4 space-y-2">
-          {trends.map((trend, index) => (
-            <li
-              key={index}
-              className="p-2 border-b border-gray-300 text-gray-800"
-            >
-              {trend}
-            </li>
-          ))}
-        </ul>
+        
+        {(dataSource || trends.length > 0) && (
+          <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+            <div className="text-sm text-gray-600 mb-2">
+              {dataSource && `Source: ${dataSource}`}
+              {timestamp && ` • ${timestamp}`}
+            </div>
+            <ul className="space-y-2">
+              {trends.map((trend, index) => (
+                <li
+                  key={index}
+                  className="p-2 border-b border-gray-300 text-gray-800"
+                >
+                  {trend}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );
