@@ -1,4 +1,5 @@
 # X (Twitter) Trending Topics Scraper
+![alt text](<Screenshot 2024-12-28 234409.png>)
 
 A web application that scrapes trending topics from X's (formerly Twitter) "What's New" section, stores them in MongoDB, and maintains a local backup.
 
@@ -60,9 +61,16 @@ npm run build
 ### 3. Cookie Authentication
 
 1. Install the "Get cookies.txt LOCALLY" extension in your browser
+![alt text](<Screenshot 2024-12-28 221037.png>)
+
 2. Visit X (Twitter)
+![alt text](<Screenshot 2024-12-28 220926.png>)
+
 3. Use the extension to copy cookies
+![alt text](<Screenshot 2024-12-28 221317.png>)
+
 4. Paste the cookies when prompted by the application
+![alt text](image.png)
 
 > Note: Cookies are used only for authentication and are not stored permanently
 
@@ -78,6 +86,11 @@ pip install -r requirements.txt
 # Run the application
 python app.py
 ```
+## Scraped Data
+![alt text](<Screenshot 2024-12-28 234351.png>)
+## Scraped Data in MongoDB
+![alt text](<Screenshot 2024-12-28 234359.png>)
+
 
 ## Important Notes
 
