@@ -21,13 +21,14 @@ A web application that scrapes trending topics from X's (formerly Twitter) "What
 ## Project Structure
 
 ```
-|-- app.py                 # Main Flask application
+|-- app.py                 # Main Flask app
 |-- twitter_scrape.py      # Scraping logic
 |-- twitter_trends.txt     # Local backup file
 |-- requirements.txt       # Python dependencies
 |-- .env                  # Environment variables
 |-- drivers/              # Chrome driver directory
 |-- cookies/              # Cookies storage
+|-- img/                    # Readme Images
 |-- frontend/             # React + TypeScript frontend
     |-- src/              # Source code
     |-- dist/             # Built files
